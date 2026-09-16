@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SovereignX Workspace</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Geist:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "inverse-on-surface": "#2c3136",
+                      "tertiary-fixed": "#6bfe9c",
+                      "surface-container-lowest": "#0a0f14",
+                      "secondary-fixed": "#d6e3ff",
+                      "surface-container": "#1b2025",
+                      "surface-container-highest": "#30353b",
+                      "on-secondary-container": "#002957",
+                      "secondary-container": "#3e90ff",
+                      "on-primary-fixed-variant": "#004f54",
+                      "secondary": "#aac7ff",
+                      "on-background": "#dee3ea",
+                      "tertiary-fixed-dim": "#4ae183",
+                      "on-primary-container": "#006970",
+                      "on-error-container": "#ffdad6",
+                      "primary": "#dbfcff",
+                      "secondary-fixed-dim": "#aac7ff",
+                      "surface-dim": "#0f1419",
+                      "outline-variant": "#3b494b",
+                      "on-tertiary": "#003919",
+                      "on-primary-fixed": "#002022",
+                      "outline": "#849495",
+                      "inverse-primary": "#006970",
+                      "on-secondary": "#003064",
+                      "on-surface": "#dee3ea",
+                      "surface-variant": "#30353b",
+                      "on-secondary-fixed": "#001b3e",
+                      "surface-bright": "#353a3f",
+                      "error": "#ffb4ab",
+                      "on-tertiary-fixed": "#00210c",
+                      "surface-tint": "#00dbe9",
+                      "error-container": "#93000a",
+                      "background": "#0f1419",
+                      "surface-container-high": "#252a30",
+                      "surface-container-low": "#171c21",
+                      "surface": "#0f1419",
+                      "primary-container": "#00f0ff",
+                      "on-error": "#690005",
+                      "on-tertiary-fixed-variant": "#005228",
+                      "on-tertiary-container": "#006d37",
+                      "primary-fixed": "#7df4ff",
+                      "tertiary-container": "#60f494",
+                      "inverse-surface": "#dee3ea",
+                      "on-surface-variant": "#b9cacb",
+                      "primary-fixed-dim": "#00dbe9",
+                      "on-primary": "#00363a",
+                      "tertiary": "#daffdd",
+                      "on-secondary-fixed-variant": "#00468d"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "margin-mobile": "16px",
+                      "unit": "4px",
+                      "gutter": "24px",
+                      "margin-desktop": "40px",
+                      "container-max": "1440px"
+              },
+              "fontFamily": {
+                      "headline-lg": ["Inter"],
+                      "headline-lg-mobile": ["Inter"],
+                      "data-mono": ["Geist"],
+                      "body-md": ["Inter"],
+                      "title-md": ["Inter"],
+                      "display-lg": ["Inter"],
+                      "label-sm": ["Geist"]
+              },
+              "fontSize": {
+                      "headline-lg": ["32px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                      "headline-lg-mobile": ["24px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                      "data-mono": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                      "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                      "title-md": ["20px", {"lineHeight": "1.4", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                      "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "label-sm": ["12px", {"lineHeight": "1", "letterSpacing": "0.1em", "fontWeight": "500"}]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        body {
+            background-color: theme('colors.surface-container-lowest');
+            color: theme('colors.on-surface');
+            /* Atmospheric Depth / Grid Pattern */
+            background-image: 
+                linear-gradient(to right, rgba(0, 219, 233, 0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(0, 219, 233, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+        
+        /* Glassmorphism Utilities */
+        .glass-panel {
+            background-color: rgba(15, 20, 25, 0.6); /* bg-surface with opacity */
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid theme('colors.outline-variant');
+        }
+        
+        /* Glows */
+        .glow-cyan {
+            box-shadow: 0 0 10px 0 rgba(0, 240, 255, 0.3);
+        }
+        .glow-cyan-hover:hover {
+            box-shadow: 0 0 15px 2px rgba(0, 240, 255, 0.4);
+        }
+        
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: theme('colors.surface-container-highest');
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: theme('colors.outline-variant');
+        }
+    </style>
+</head>
+<body class="flex h-screen w-full overflow-hidden antialiased selection:bg-primary-container selection:text-on-primary-container">
+<!-- Shared Component: SideNavBar -->
+<nav class="fixed left-0 top-0 h-full flex flex-col py-6 px-4 z-50 bg-surface/60 backdrop-blur-xl h-screen w-64 border-r border-outline-variant bg-surface-container border-r border-outline-variant">
+<!-- Header / Brand -->
+<div class="mb-8 px-2 flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-primary/10 border border-primary flex items-center justify-center glow-cyan">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">hexagon</span>
+</div>
+<div>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary tracking-tighter">SovereignX</h1>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest mt-1">Secure Industrial AI</p>
+</div>
+</div>
+<!-- Navigation Links -->
+<div class="flex flex-col gap-1 flex-1">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-highest/50 hover:text-primary transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-xl">dashboard</span>
+<span class="font-label-sm text-label-sm">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-highest/50 hover:text-primary transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-xl">smart_toy</span>
+<span class="font-label-sm text-label-sm">AI Agents</span>
+</a>
+<!-- Active Tab -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-primary font-bold border-r-2 border-primary-fixed-dim bg-primary/5 scale-[0.98] transition-transform duration-150" href="#">
+<span class="material-symbols-outlined text-xl" style="font-variation-settings: 'FILL' 1;">work</span>
+<span class="font-label-sm text-label-sm">Workspace</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-highest/50 hover:text-primary transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-xl">menu_book</span>
+<span class="font-label-sm text-label-sm">Knowledge Base</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-highest/50 hover:text-primary transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-xl">query_stats</span>
+<span class="font-label-sm text-label-sm">Analysis Studio</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-highest/50 hover:text-primary transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-xl">description</span>
+<span class="font-label-sm text-label-sm">Reports</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-highest/50 hover:text-primary transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-xl">group</span>
+<span class="font-label-sm text-label-sm">Users</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-highest/50 hover:text-primary transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-xl">security</span>
+<span class="font-label-sm text-label-sm">Security &amp; Audit</span>
+</a>
+</div>
+<!-- Footer Actions -->
+<div class="mt-auto flex flex-col gap-1 border-t border-outline-variant pt-4">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-highest/50 hover:text-primary transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-xl">settings</span>
+<span class="font-label-sm text-label-sm">Settings</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-highest/50 hover:text-primary transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-xl">help_outline</span>
+<span class="font-label-sm text-label-sm">Support</span>
+</a>
+<button class="mt-4 w-full py-2.5 bg-primary text-on-primary-fixed rounded font-label-sm text-label-sm font-bold tracking-wider hover:bg-primary-fixed-dim glow-cyan-hover transition-all">
+                NEW ANALYSIS
+            </button>
+<!-- User Avatar Mock -->
+<div class="mt-4 flex items-center gap-3 px-2">
+<div class="w-8 h-8 rounded-full bg-surface-container-highest border border-outline flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A futuristic, dimly lit headshot portrait of a security operator wearing a high-tech communication earpiece. The lighting is dominated by deep obsidian shadows with sharp electric cyan rim light illuminating the side of their face. The style is hyper-realistic, conveying intense focus and professionalism within a mission-critical industrial command center environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA50j6VAYwjRYXALv376A157AplnL-hnwd8X6m0032LBTbpkQ0zzIsc2oVU8Ody9beCz6b1CEZ0p2MsdzpVmc-N34woG54VQXJzsPO267iKNZGBhVG7KxM7CGH53yFfl5zMbvvKZaOw1CGTOUP33KeAwp1fffAaWXYfX2UekaFbpBAxHTQVUiU0OstDPCw9vUQJuDG3C1j-r1kWJ_JwDEVbW9J5c-g2pWH2r8uw330bQ0zgABrJ9-DOyA"/>
+</div>
+<div class="flex flex-col">
+<span class="font-data-mono text-data-mono text-xs text-on-surface">OPR-772</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant text-[10px]">Level 4 Clearance</span>
+</div>
+</div>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="flex-1 ml-64 flex flex-col h-full relative">
+<!-- Ambient radial glow behind content -->
+<div class="absolute inset-0 pointer-events-none" style="background: radial-gradient(circle at 50% 0%, rgba(0, 219, 233, 0.05) 0%, transparent 70%);"></div>
+<!-- Top Header / Status Bar -->
+<header class="h-16 flex-shrink-0 border-b border-outline-variant glass-panel border-x-0 border-t-0 flex items-center justify-between px-gutter relative z-10">
+<div class="flex items-center gap-4">
+<h2 class="font-title-md text-title-md text-on-surface">Active Workspace</h2>
+<div class="h-4 w-px bg-outline-variant"></div>
+<!-- Industry Chip -->
+<div class="flex items-center gap-1.5 px-2.5 py-1 rounded border border-outline-variant bg-surface-container/50">
+<span class="material-symbols-outlined text-[14px] text-on-surface-variant">science</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant tracking-widest">CHEMICAL INDUSTRY</span>
+</div>
+</div>
+<!-- Status Badge -->
+<div class="flex items-center gap-2 px-3 py-1.5 rounded border border-tertiary-fixed-dim/30 bg-tertiary-fixed-dim/10">
+<div class="w-2 h-2 rounded-full bg-tertiary-fixed shadow-[0_0_8px_rgba(107,254,156,0.6)] animate-pulse"></div>
+<span class="font-label-sm text-label-sm text-tertiary-fixed tracking-widest">ON-PREMISE SECURE</span>
+</div>
+</header>
+<!-- 4-Column Grid Layout -->
+<div class="flex-1 overflow-y-auto p-gutter z-10">
+<div class="grid grid-cols-1 xl:grid-cols-4 gap-gutter h-full min-h-[600px]">
+<!-- Column 1: AI Assistant -->
+<section class="glass-panel rounded-xl flex flex-col h-full overflow-hidden xl:col-span-1 border-t border-t-outline">
+<div class="p-4 border-b border-outline-variant flex items-center justify-between bg-surface-container/30">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">forum</span>
+<h3 class="font-title-md text-title-md text-[16px]">AI Assistant</h3>
+</div>
+<span class="font-label-sm text-label-sm text-primary px-2 py-0.5 rounded bg-primary/10 border border-primary/20">READY</span>
+</div>
+<div class="flex-1 p-4 overflow-y-auto flex flex-col gap-4">
+<!-- System Message -->
+<div class="flex flex-col gap-1 w-full max-w-[90%]">
+<span class="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1"><span class="material-symbols-outlined text-[12px]">smart_toy</span> SovX System</span>
+<div class="p-3 rounded-r-lg rounded-bl-lg bg-surface-container border border-outline-variant">
+<p class="font-body-md text-body-md text-sm text-on-surface">System initialized. Chemical compound database loaded. Awaiting query...</p>
+</div>
+</div>
+<!-- User Message -->
+<div class="flex flex-col gap-1 w-full max-w-[90%] self-end items-end">
+<span class="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1">OPR-772 <span class="material-symbols-outlined text-[12px]">account_circle</span></span>
+<div class="p-3 rounded-l-lg rounded-br-lg bg-primary/10 border border-primary/30">
+<p class="font-body-md text-body-md text-sm text-primary">Analyze recent toxicity reports for Compound X-99.</p>
+</div>
+</div>
+<!-- Typing Indicator -->
+<div class="flex items-center gap-2 mt-2">
+<div class="w-1.5 h-1.5 rounded-full bg-primary animate-bounce" style="animation-delay: 0ms;"></div>
+<div class="w-1.5 h-1.5 rounded-full bg-primary animate-bounce" style="animation-delay: 150ms;"></div>
+<div class="w-1.5 h-1.5 rounded-full bg-primary animate-bounce" style="animation-delay: 300ms;"></div>
+</div>
+</div>
+<div class="p-4 border-t border-outline-variant bg-surface-container-lowest/80">
+<div class="relative flex items-center">
+<input class="w-full bg-surface-container border border-outline-variant rounded p-3 pr-10 font-data-mono text-data-mono text-sm text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors placeholder:text-outline" placeholder="Enter query parameters..." type="text"/>
+<button class="absolute right-2 text-primary hover:text-primary-fixed transition-colors">
+<span class="material-symbols-outlined">send</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Column 2: Files & Assets -->
+<section class="glass-panel rounded-xl flex flex-col h-full xl:col-span-1 border-t border-t-outline">
+<div class="p-4 border-b border-outline-variant flex items-center justify-between bg-surface-container/30">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-on-surface">folder_open</span>
+<h3 class="font-title-md text-title-md text-[16px]">Files &amp; Assets</h3>
+</div>
+<button class="text-outline hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[18px]">add</span>
+</button>
+</div>
+<div class="p-4 flex flex-col gap-3 overflow-y-auto">
+<!-- File Item -->
+<div class="group flex items-center gap-3 p-3 rounded bg-surface-container-lowest border border-outline-variant hover:border-primary/50 transition-colors cursor-pointer">
+<div class="w-8 h-8 rounded bg-error-container/20 flex items-center justify-center text-error border border-error/30">
+<span class="material-symbols-outlined text-[18px]">picture_as_pdf</span>
+</div>
+<div class="flex-1 overflow-hidden">
+<p class="font-data-mono text-data-mono text-sm text-on-surface truncate">Q3_Toxicity_Report.pdf</p>
+<p class="font-label-sm text-label-sm text-outline mt-1">4.2 MB • Updated 2h ago</p>
+</div>
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors">download</span>
+</div>
+<!-- File Item -->
+<div class="group flex items-center gap-3 p-3 rounded bg-surface-container-lowest border border-outline-variant hover:border-primary/50 transition-colors cursor-pointer">
+<div class="w-8 h-8 rounded bg-secondary-container/20 flex items-center justify-center text-secondary border border-secondary/30">
+<span class="material-symbols-outlined text-[18px]">data_object</span>
+</div>
+<div class="flex-1 overflow-hidden">
+<p class="font-data-mono text-data-mono text-sm text-on-surface truncate">Compound_X99_Specs.json</p>
+<p class="font-label-sm text-label-sm text-outline mt-1">128 KB • Structural Data</p>
+</div>
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors">download</span>
+</div>
+<!-- File Item -->
+<div class="group flex items-center gap-3 p-3 rounded bg-surface-container-lowest border border-outline-variant hover:border-primary/50 transition-colors cursor-pointer">
+<div class="w-8 h-8 rounded bg-tertiary-container/20 flex items-center justify-center text-tertiary border border-tertiary/30">
+<span class="material-symbols-outlined text-[18px]">table</span>
+</div>
+<div class="flex-1 overflow-hidden">
+<p class="font-data-mono text-data-mono text-sm text-on-surface truncate">Reaction_Logs_Batch_4.csv</p>
+<p class="font-label-sm text-label-sm text-outline mt-1">12.1 MB • Raw Telemetry</p>
+</div>
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors">download</span>
+</div>
+</div>
+</section>
+<!-- Column 3: Knowledge Base -->
+<section class="glass-panel rounded-xl flex flex-col h-full xl:col-span-1 border-t border-t-outline">
+<div class="p-4 border-b border-outline-variant flex items-center justify-between bg-surface-container/30">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-on-surface">menu_book</span>
+<h3 class="font-title-md text-title-md text-[16px]">Knowledge Base</h3>
+</div>
+<span class="material-symbols-outlined text-outline text-[18px]">search</span>
+</div>
+<div class="p-4 flex flex-col gap-4 overflow-y-auto">
+<!-- Article 1 -->
+<div class="flex flex-col gap-2 pb-4 border-b border-outline-variant/50">
+<h4 class="font-title-md text-title-md text-[14px] text-primary">Standard Operating Procedures</h4>
+<p class="font-body-md text-body-md text-sm text-on-surface-variant line-clamp-2">All personnel must adhere to protocol Alpha-7 when interacting with volatile synthesize environments...</p>
+<a class="font-data-mono text-data-mono text-xs text-primary flex items-center gap-1 mt-1 hover:text-primary-fixed transition-colors" href="#">
+                                READ FULL <span class="material-symbols-outlined text-[12px]">chevron_right</span>
+</a>
+</div>
+<!-- Article 2 -->
+<div class="flex flex-col gap-2 pb-4 border-b border-outline-variant/50">
+<h4 class="font-title-md text-title-md text-[14px] text-primary">Regulatory Compliance Guide 2024</h4>
+<p class="font-body-md text-body-md text-sm text-on-surface-variant line-clamp-2">Updated thresholds for emissions and worker safety standards per EPA mandate section 114(b)...</p>
+<a class="font-data-mono text-data-mono text-xs text-primary flex items-center gap-1 mt-1 hover:text-primary-fixed transition-colors" href="#">
+                                READ FULL <span class="material-symbols-outlined text-[12px]">chevron_right</span>
+</a>
+</div>
+<!-- Article 3 -->
+<div class="flex flex-col gap-2">
+<h4 class="font-title-md text-title-md text-[14px] text-primary">Emergency Containment Protocols</h4>
+<p class="font-body-md text-body-md text-sm text-on-surface-variant line-clamp-2">Immediate actions required upon detection of thermal runaway in Class-3 pressure vessels.</p>
+<a class="font-data-mono text-data-mono text-xs text-primary flex items-center gap-1 mt-1 hover:text-primary-fixed transition-colors" href="#">
+                                READ FULL <span class="material-symbols-outlined text-[12px]">chevron_right</span>
+</a>
+</div>
+</div>
+</section>
+<!-- Column 4: Analysis & Risks -->
+<section class="flex flex-col gap-4 h-full xl:col-span-1">
+<!-- Stat Card: System Load -->
+<div class="glass-panel rounded-xl p-4 relative overflow-hidden border-t border-t-outline flex-shrink-0">
+<!-- Decorative background grid element -->
+<div class="absolute right-0 top-0 w-24 h-full opacity-10" style="background-image: repeating-linear-gradient(45deg, theme('colors.primary') 0, theme('colors.primary') 1px, transparent 1px, transparent 8px);"></div>
+<div class="flex justify-between items-start relative z-10">
+<div>
+<p class="font-label-sm text-label-sm text-outline mb-1 uppercase">System Load</p>
+<div class="flex items-baseline gap-2">
+<h3 class="font-display-lg text-display-lg text-[32px] text-on-surface">78<span class="text-[20px]">%</span></h3>
+</div>
+</div>
+<span class="material-symbols-outlined text-primary text-[24px]">memory</span>
+</div>
+<div class="mt-4 w-full h-1.5 bg-surface-container rounded-full overflow-hidden relative z-10">
+<div class="h-full bg-primary w-[78%] rounded-full shadow-[0_0_8px_rgba(0,240,255,0.8)]"></div>
+</div>
+</div>
+<!-- Stat Card: Data Processing -->
+<div class="glass-panel rounded-xl p-4 relative overflow-hidden border-t border-t-outline flex-shrink-0">
+<div class="flex justify-between items-start relative z-10">
+<div>
+<p class="font-label-sm text-label-sm text-outline mb-1 uppercase">Data Processing</p>
+<div class="flex items-baseline gap-2">
+<h3 class="font-display-lg text-display-lg text-[32px] text-on-surface">45<span class="text-[20px]">%</span></h3>
+</div>
+</div>
+<span class="material-symbols-outlined text-secondary text-[24px]">dataset</span>
+</div>
+<!-- Mini Chart Mockup -->
+<div class="mt-4 h-8 flex items-end gap-1 opacity-50 relative z-10">
+<div class="w-full bg-secondary h-[30%]"></div>
+<div class="w-full bg-secondary h-[50%]"></div>
+<div class="w-full bg-secondary h-[40%]"></div>
+<div class="w-full bg-secondary h-[70%]"></div>
+<div class="w-full bg-secondary h-[45%]"></div>
+<div class="w-full bg-secondary h-[60%]"></div>
+<div class="w-full bg-secondary h-[80%]"></div>
+</div>
+</div>
+<!-- Critical Alert Indicator -->
+<div class="rounded-xl border border-error bg-error-container/20 p-4 relative overflow-hidden flex-1 flex flex-col justify-center">
+<div class="absolute top-0 left-0 w-full h-1 bg-error animate-pulse shadow-[0_0_15px_rgba(255,180,171,0.8)]"></div>
+<div class="flex items-start gap-3">
+<div class="mt-1">
+<span class="material-symbols-outlined text-error text-[24px]">warning</span>
+</div>
+<div class="flex flex-col gap-2">
+<h4 class="font-title-md text-title-md text-[16px] text-error font-bold">CRITICAL RISK DETECTED</h4>
+<p class="font-body-md text-body-md text-sm text-on-surface">Temperature variance in Reactor B exceeded safe thresholds by 4.2% over the last hour.</p>
+<div class="mt-2 flex gap-2">
+<button class="px-3 py-1.5 bg-error text-on-error font-label-sm text-label-sm rounded hover:bg-error/90 transition-colors">
+                                        INITIATE PROTOCOL
+                                    </button>
+<button class="px-3 py-1.5 border border-error/50 text-error font-label-sm text-label-sm rounded hover:bg-error/10 transition-colors">
+                                        VIEW LOGS
+                                    </button>
+</div>
+</div>
+</div>
+<!-- Background Schematic Image mapped to data-alt constraint -->
+<div class="absolute -right-10 -bottom-10 w-48 h-48 opacity-10 pointer-events-none mix-blend-screen" data-alt="A highly complex, glowing wireframe schematic of an industrial chemical reactor core. The diagram is rendered in sharp, high-contrast red and deep black lines, resembling a digital blueprint on a secure terminal. Numerous data nodes and temperature readouts cluster around the central vessel, emphasizing a state of critical alert. The overall aesthetic is strictly technical, futuristic, and industrial, fitting a dark-mode mission control interface." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCnWn9ch6KOJvA6-oy2w74q00IXmiceuYKkIEQ9jDO9QNZDR0i6kCeqrgtcOnQVjNsHgwW_NoZXpk4Z25CTpJRWh2D_1YpnApMkTKHnAdxm_HgOT3N7LUHFOvrEP9BcRQWuT_SbtLSmWmnyBpwIf4kKxetUqtxCQ2WufizqmVagVlIedf2LJxxKjnyczUNgkXsUedoftY9JpTziwcF-CjyCX3Hs-MtAwv9LZpNhtmThy6b9-78iJtwW2w')"></div>
+</div>
+</section>
+</div>
+</div>
+</main>
+</body></html>

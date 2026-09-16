@@ -1,0 +1,860 @@
+```html
+<!DOCTYPE html>
+<html lang="en" class="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SovereignX - Documents</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        body {
+            background: #0f1419;
+            color: #dee3ea;
+        }
+
+        .grid-bg {
+            background-image:
+                linear-gradient(to right, rgba(0, 219, 233, 0.05) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(0, 219, 233, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen grid-bg">
+
+<!-- ================= HEADER ================= -->
+
+<header class="border-b border-gray-700 bg-black/70 backdrop-blur-xl p-5">
+
+    <div class="max-w-7xl mx-auto flex justify-between items-center">
+
+        <div>
+            <h1 class="text-2xl font-bold text-cyan-400">
+                SOVEREIGNX
+            </h1>
+
+            <p class="text-xs text-gray-400">
+                On-Premise AI Document Management
+            </p>
+        </div>
+
+        <div class="text-right">
+
+            <p id="workspaceName"
+               class="font-semibold text-white">
+                Workspace
+            </p>
+
+            <p id="industryName"
+               class="text-xs text-cyan-400">
+                GENERAL
+            </p>
+
+        </div>
+
+    </div>
+
+</header>
+
+
+<!-- ================= MAIN ================= -->
+
+<main class="max-w-7xl mx-auto p-6">
+
+    <!-- TITLE -->
+
+    <div class="mb-8">
+
+        <h2 class="text-3xl font-bold text-white">
+            Documents
+        </h2>
+
+        <p class="text-gray-400 mt-2">
+            Upload documents and use them for local AI analysis.
+        </p>
+
+    </div>
+
+
+    <!-- ================= UPLOAD ================= -->
+
+    <section class="bg-gray-900/80 border border-gray-700 rounded-xl p-6 mb-8">
+
+        <h3 class="text-xl font-semibold text-white mb-5">
+            Upload Document
+        </h3>
+
+
+        <form id="uploadForm"
+              class="flex flex-col md:flex-row gap-4">
+
+            <input
+                id="fileInput"
+                type="file"
+                required
+                accept=".pdf,.docx,.txt,.csv,.xlsx"
+                class="flex-1 bg-gray-800 border border-gray-600 rounded-lg p-3 text-white"
+            >
+
+            <button
+                id="uploadButton"
+                type="submit"
+                class="bg-cyan-500 hover:bg-cyan-400 text-black font-bold px-8 py-3 rounded-lg">
+
+                Upload
+
+            </button>
+
+        </form>
+
+
+        <p id="uploadStatus"
+           class="mt-4 text-sm">
+        </p>
+
+    </section>
+
+
+    <!-- ================= DOCUMENT LIST ================= -->
+
+    <section class="bg-gray-900/80 border border-gray-700 rounded-xl p-6">
+
+        <div class="flex justify-between items-center mb-6">
+
+            <div>
+
+                <h3 class="text-xl font-semibold text-white">
+                    Uploaded Documents
+                </h3>
+
+                <p class="text-sm text-gray-500 mt-1">
+                    Workspace documents
+                </p>
+
+            </div>
+
+
+            <button
+                id="refreshButton"
+                type="button"
+                class="border border-cyan-500 text-cyan-400 hover:bg-cyan-500 hover:text-black px-4 py-2 rounded-lg">
+
+                Refresh
+
+            </button>
+
+        </div>
+
+
+        <div id="documentsContainer">
+
+            <p class="text-gray-400">
+                Loading documents...
+            </p>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<!-- ================= JAVASCRIPT ================= -->
+
+<script>
+
+const API_URL = "http://127.0.0.1:8000";
+
+
+// =====================================================
+// LOCAL STORAGE
+// =====================================================
+
+const workspaceId =
+    localStorage.getItem("workspace_id");
+
+const workspaceName =
+    localStorage.getItem("workspace_name") || "Workspace";
+
+const organizationId =
+    localStorage.getItem("organization_id") || "";
+
+const industry =
+    localStorage.getItem("industry") || "General";
+
+
+console.log("=================================");
+console.log("SOVEREIGNX DOCUMENT SYSTEM");
+console.log("API:", API_URL);
+console.log("Workspace:", workspaceId);
+console.log("Workspace Name:", workspaceName);
+console.log("Organization:", organizationId);
+console.log("Industry:", industry);
+console.log("=================================");
+
+
+// =====================================================
+// LOGIN CHECK
+// =====================================================
+
+if (!workspaceId) {
+
+    alert("Workspace not found. Please login again.");
+
+    window.location.href =
+        "../auth_portal_toggle_mode/index.html";
+
+}
+
+
+// =====================================================
+// HEADER DATA
+// =====================================================
+
+document.getElementById("workspaceName").textContent =
+    workspaceName;
+
+document.getElementById("industryName").textContent =
+    industry.toUpperCase();
+
+
+// =====================================================
+// ESCAPE HTML
+// =====================================================
+
+function escapeHtml(value) {
+
+    return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+
+}
+
+
+// =====================================================
+// LOAD DOCUMENTS
+// IMPORTANT URL
+// =====================================================
+
+async function loadDocuments() {
+
+    const container =
+        document.getElementById("documentsContainer");
+
+
+    container.innerHTML = `
+        <p class="text-gray-400">
+            Loading documents...
+        </p>
+    `;
+
+
+    const url =
+        `${API_URL}/documents/workspace/${workspaceId}`;
+
+
+    console.log("Fetching documents:", url);
+
+
+    try {
+
+        const response =
+            await fetch(url, {
+                method: "GET"
+            });
+
+
+        console.log(
+            "Documents HTTP:",
+            response.status
+        );
+
+
+        if (!response.ok) {
+
+            const errorText =
+                await response.text();
+
+            console.error(
+                "Documents API error:",
+                errorText
+            );
+
+            throw new Error(
+                `Documents API returned HTTP ${response.status}`
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        console.log(
+            "Documents received:",
+            data
+        );
+
+
+        const documents =
+            data.documents || [];
+
+
+        // =============================================
+        // NO DOCUMENTS
+        // =============================================
+
+        if (documents.length === 0) {
+
+            container.innerHTML = `
+
+                <div class="text-center py-12">
+
+                    <div class="text-5xl mb-4">
+                        📄
+                    </div>
+
+                    <p class="text-gray-400">
+                        No documents uploaded yet.
+                    </p>
+
+                    <p class="text-gray-600 text-sm mt-2">
+                        Upload a document above.
+                    </p>
+
+                </div>
+
+            `;
+
+            return;
+
+        }
+
+
+        // =============================================
+        // DISPLAY DOCUMENTS
+        // =============================================
+
+        container.innerHTML = "";
+
+
+        documents.forEach(function(doc) {
+
+            const card =
+                document.createElement("div");
+
+
+            card.className =
+                "border border-gray-700 bg-gray-800/70 rounded-xl p-5 mb-4";
+
+
+            let statusClass =
+                "text-gray-300";
+
+
+            if (doc.status === "analyzed") {
+
+                statusClass =
+                    "text-green-400";
+
+            }
+
+
+            if (doc.status === "processing") {
+
+                statusClass =
+                    "text-yellow-400";
+
+            }
+
+
+            if (doc.status === "analysis_failed") {
+
+                statusClass =
+                    "text-red-400";
+
+            }
+
+
+            card.innerHTML = `
+
+                <div class="flex flex-col md:flex-row justify-between gap-5">
+
+                    <div class="flex gap-4">
+
+                        <div class="text-4xl">
+                            📄
+                        </div>
+
+
+                        <div>
+
+                            <h4 class="font-semibold text-white text-lg">
+                                ${escapeHtml(doc.filename)}
+                            </h4>
+
+
+                            <p class="text-xs text-gray-500 mt-2">
+                                Document ID:
+                                ${escapeHtml(doc.id)}
+                            </p>
+
+
+                            <p class="text-sm ${statusClass} mt-2">
+                                Status:
+                                ${escapeHtml(doc.status || "uploaded")}
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="flex gap-3 items-center">
+
+                        <button
+                            type="button"
+                            class="analysisButton bg-cyan-500 hover:bg-cyan-400 text-black px-5 py-2 rounded-lg font-semibold"
+                            data-id="${escapeHtml(doc.id)}">
+
+                            AI Analysis
+
+                        </button>
+
+
+                        <button
+                            type="button"
+                            class="deleteButton border border-red-500 text-red-400 hover:bg-red-500 hover:text-white px-4 py-2 rounded-lg"
+                            data-id="${escapeHtml(doc.id)}">
+
+                            Delete
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            `;
+
+
+            // AI ANALYSIS BUTTON
+
+            const analysisButton =
+                card.querySelector(".analysisButton");
+
+
+            analysisButton.addEventListener(
+                "click",
+                function() {
+
+                    openAnalysis(doc.id);
+
+                }
+            );
+
+
+            // DELETE BUTTON
+
+            const deleteButton =
+                card.querySelector(".deleteButton");
+
+
+            deleteButton.addEventListener(
+                "click",
+                function() {
+
+                    deleteDocument(doc.id);
+
+                }
+            );
+
+
+            container.appendChild(card);
+
+        });
+
+    }
+
+    catch(error) {
+
+        console.error(
+            "Document fetch error:",
+            error
+        );
+
+
+        container.innerHTML = `
+
+            <div class="border border-red-500/40 bg-red-500/10 rounded-xl p-6">
+
+                <p class="text-red-400 font-semibold">
+                    Failed to load documents
+                </p>
+
+
+                <p class="text-gray-400 text-sm mt-2">
+                    ${escapeHtml(error.message)}
+                </p>
+
+
+                <button
+                    type="button"
+                    id="retryButton"
+                    class="mt-4 border border-red-400 text-red-400 px-4 py-2 rounded-lg">
+
+                    Retry
+
+                </button>
+
+            </div>
+
+        `;
+
+
+        const retryButton =
+            document.getElementById("retryButton");
+
+
+        if (retryButton) {
+
+            retryButton.addEventListener(
+                "click",
+                loadDocuments
+            );
+
+        }
+
+    }
+
+}
+
+
+// =====================================================
+// UPLOAD DOCUMENT
+// =====================================================
+
+document
+    .getElementById("uploadForm")
+    .addEventListener("submit", async function(event) {
+
+        event.preventDefault();
+
+
+        const fileInput =
+            document.getElementById("fileInput");
+
+        const uploadStatus =
+            document.getElementById("uploadStatus");
+
+        const uploadButton =
+            document.getElementById("uploadButton");
+
+
+        const file =
+            fileInput.files[0];
+
+
+        if (!file) {
+
+            uploadStatus.textContent =
+                "Please select a file.";
+
+            uploadStatus.className =
+                "mt-4 text-sm text-red-400";
+
+            return;
+
+        }
+
+
+        // =============================================
+        // START UPLOAD
+        // =============================================
+
+        uploadButton.disabled = true;
+
+        uploadButton.textContent =
+            "Uploading...";
+
+
+        uploadStatus.textContent =
+            "Uploading document to local backend...";
+
+        uploadStatus.className =
+            "mt-4 text-sm text-yellow-400";
+
+
+        try {
+
+            const formData =
+                new FormData();
+
+
+            formData.append(
+                "workspace_id",
+                workspaceId
+            );
+
+
+            formData.append(
+                "file",
+                file
+            );
+
+
+            console.log(
+                "Uploading file:",
+                file.name
+            );
+
+
+            const response =
+                await fetch(
+                    `${API_URL}/documents/upload`,
+                    {
+                        method: "POST",
+                        body: formData
+                    }
+                );
+
+
+            const responseText =
+                await response.text();
+
+
+            let data = {};
+
+
+            try {
+
+                data =
+                    JSON.parse(responseText);
+
+            }
+
+            catch {
+
+                data = {
+                    detail: responseText
+                };
+
+            }
+
+
+            console.log(
+                "Upload response:",
+                data
+            );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    data.detail ||
+                    `Upload failed with HTTP ${response.status}`
+                );
+
+            }
+
+
+            // =============================================
+            // SUCCESS
+            // =============================================
+
+            uploadStatus.textContent =
+                "Document uploaded successfully.";
+
+            uploadStatus.className =
+                "mt-4 text-sm text-green-400";
+
+
+            fileInput.value = "";
+
+
+            // VERY IMPORTANT
+            // Fetch uploaded document again
+
+            await loadDocuments();
+
+        }
+
+        catch(error) {
+
+            console.error(
+                "Upload error:",
+                error
+            );
+
+
+            uploadStatus.textContent =
+                "Upload failed: " + error.message;
+
+            uploadStatus.className =
+                "mt-4 text-sm text-red-400";
+
+        }
+
+        finally {
+
+            uploadButton.disabled = false;
+
+            uploadButton.textContent =
+                "Upload";
+
+        }
+
+    });
+
+
+// =====================================================
+// DELETE DOCUMENT
+// =====================================================
+
+async function deleteDocument(documentId) {
+
+    const confirmDelete =
+        confirm("Delete this document?");
+
+
+    if (!confirmDelete) {
+
+        return;
+
+    }
+
+
+    try {
+
+        const response =
+            await fetch(
+                `${API_URL}/documents/${documentId}`,
+                {
+                    method: "DELETE"
+                }
+            );
+
+
+        const text =
+            await response.text();
+
+
+        let data = {};
+
+
+        try {
+
+            data =
+                JSON.parse(text);
+
+        }
+
+        catch {
+
+            data = {
+                detail: text
+            };
+
+        }
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.detail ||
+                `Delete failed with HTTP ${response.status}`
+            );
+
+        }
+
+
+        await loadDocuments();
+
+    }
+
+    catch(error) {
+
+        console.error(
+            "Delete error:",
+            error
+        );
+
+
+        alert(
+            "Delete failed: " +
+            error.message
+        );
+
+    }
+
+}
+
+
+// =====================================================
+// OPEN AI ANALYSIS PAGE
+// =====================================================
+
+function openAnalysis(documentId) {
+
+    console.log(
+        "Opening AI analysis for:",
+        documentId
+    );
+
+
+    localStorage.setItem(
+        "selected_document_id",
+        documentId
+    );
+
+
+    localStorage.setItem(
+        "analysis_workspace_id",
+        workspaceId
+    );
+
+
+    localStorage.setItem(
+        "analysis_filename",
+        "selected"
+    );
+
+
+    window.location.href =
+        "../analysis_studio_populated_dashboard/index.html";
+
+}
+
+
+// =====================================================
+// REFRESH
+// =====================================================
+
+document
+    .getElementById("refreshButton")
+    .addEventListener(
+        "click",
+        loadDocuments
+    );
+
+
+// =====================================================
+// INITIAL LOAD
+// =====================================================
+
+loadDocuments();
+
+</script>
+
+</body>
+</html>
+```

@@ -1,0 +1,1833 @@
+```html
+<!DOCTYPE html>
+<html lang="en" class="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SovereignX - AI Analysis</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&display=swap"
+        rel="stylesheet"
+    >
+
+    <style>
+        body {
+            background: #0f1419;
+            color: #dee3ea;
+        }
+
+        .grid-bg {
+            background-image:
+                linear-gradient(to right, rgba(0,219,233,.05) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(0,219,233,.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        .result-box {
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .document-card {
+            transition: all .2s ease;
+        }
+
+        .document-card:hover {
+            border-color: #06b6d4;
+        }
+
+        .document-card.selected {
+            border-color: #06b6d4;
+            background: rgba(6, 182, 212, .10);
+        }
+    </style>
+</head>
+
+
+<body class="min-h-screen grid-bg">
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<header class="border-b border-gray-700 bg-black/70 backdrop-blur-xl">
+
+    <div class="max-w-7xl mx-auto px-6 py-5">
+
+        <div class="flex flex-col md:flex-row justify-between gap-4">
+
+            <div>
+
+                <h1 class="text-2xl font-bold text-cyan-400">
+                    SOVEREIGNX
+                </h1>
+
+                <p class="text-xs text-gray-400 mt-1">
+                    ON-PREMISE AI • ANALYSIS STUDIO
+                </p>
+
+            </div>
+
+
+            <div class="text-left md:text-right">
+
+                <p
+                    id="workspaceName"
+                    class="font-semibold text-white"
+                >
+                    Workspace
+                </p>
+
+                <p
+                    id="industryName"
+                    class="text-xs text-cyan-400"
+                >
+                    GENERAL
+                </p>
+
+                <p
+                    id="workspaceIdText"
+                    class="text-xs text-gray-500 mt-1"
+                ></p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</header>
+
+
+
+<!-- =====================================================
+     MAIN
+===================================================== -->
+
+<main class="max-w-7xl mx-auto px-6 py-8">
+
+    <!-- TITLE -->
+
+    <div class="mb-8">
+
+        <div class="flex items-center gap-3">
+
+            <span class="material-symbols-outlined text-cyan-400 text-4xl">
+                analytics
+            </span>
+
+            <div>
+
+                <h2 class="text-3xl font-bold text-white">
+                    AI Analysis Studio
+                </h2>
+
+                <p class="text-gray-400 mt-1">
+                    Analyze confidential industrial documents using the local AI engine.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         AI STATUS
+    ===================================================== -->
+
+    <div
+        class="mb-6 border border-green-500/30 bg-green-500/5 rounded-xl p-4"
+    >
+
+        <div class="flex items-center gap-3">
+
+            <div
+                class="w-3 h-3 bg-green-400 rounded-full animate-pulse"
+            ></div>
+
+            <div>
+
+                <p class="text-green-400 font-semibold">
+                    LOCAL AI ONLINE
+                </p>
+
+                <p class="text-xs text-gray-400">
+                    Analysis runs through your local backend / Ollama engine.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         DOCUMENT SECTION
+    ===================================================== -->
+
+    <section
+        class="bg-gray-900/80 border border-gray-700 rounded-xl p-6 mb-6"
+    >
+
+        <div class="flex flex-col md:flex-row justify-between gap-4 mb-5">
+
+            <div>
+
+                <h3 class="text-xl font-semibold text-white">
+                    Documents
+                </h3>
+
+                <p class="text-sm text-gray-400">
+                    Workspace documents available for AI analysis
+                </p>
+
+            </div>
+
+
+            <div class="flex gap-2">
+
+                <button
+                    id="refreshDocuments"
+                    type="button"
+                    class="border border-cyan-500 text-cyan-400 px-4 py-2 rounded-lg hover:bg-cyan-500/10"
+                >
+
+                    <span class="material-symbols-outlined align-middle text-sm">
+                        refresh
+                    </span>
+
+                    Refresh
+
+                </button>
+
+                <label
+                    class="cursor-pointer bg-cyan-500 hover:bg-cyan-400 text-black font-bold px-4 py-2 rounded-lg"
+                >
+
+                    <span class="material-symbols-outlined align-middle text-sm">
+                        upload_file
+                    </span>
+
+                    Upload
+
+                    <input
+                        id="documentUpload"
+                        type="file"
+                        class="hidden"
+                    >
+
+                </label>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- Upload status -->
+
+        <div
+            id="uploadStatus"
+            class="hidden mb-4 rounded-lg p-3 text-sm"
+        ></div>
+
+
+
+        <!-- Documents -->
+
+        <div id="documentsList">
+
+            <div class="text-center py-10 text-gray-500">
+
+                <span class="material-symbols-outlined text-5xl">
+                    description
+                </span>
+
+                <p class="mt-3">
+                    Loading documents...
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         ANALYZER
+    ===================================================== -->
+
+    <section
+        class="bg-gray-900/80 border border-gray-700 rounded-xl p-6 mb-6"
+    >
+
+        <h3 class="text-xl font-semibold text-white mb-1">
+            Document Analyzer
+        </h3>
+
+        <p class="text-sm text-gray-400 mb-6">
+            Run analysis using the local AI engine.
+        </p>
+
+
+
+        <!-- Selected document -->
+
+        <div
+            class="border border-gray-700 rounded-xl p-5 mb-5 bg-black/20"
+        >
+
+            <p class="text-xs text-gray-500 uppercase tracking-wider">
+                Selected Document
+            </p>
+
+            <div class="flex items-center gap-3 mt-3">
+
+                <span class="material-symbols-outlined text-cyan-400">
+                    description
+                </span>
+
+                <div>
+
+                    <p
+                        id="selectedDocument"
+                        class="font-semibold text-white"
+                    >
+                        No document selected
+                    </p>
+
+                    <p
+                        id="selectedDocumentId"
+                        class="text-xs text-gray-500 mt-1"
+                    ></p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- Analysis controls -->
+
+        <div class="grid md:grid-cols-2 gap-5">
+
+            <div>
+
+                <label
+                    class="block text-sm text-gray-400 mb-2"
+                >
+                    Analysis Type
+                </label>
+
+                <select
+                    id="analysisType"
+                    class="w-full bg-gray-800 border border-gray-600 rounded-lg px-4 py-3 text-white"
+                >
+
+                    <option value="general">
+                        General Analysis
+                    </option>
+
+                    <option value="risk">
+                        Risk Analysis
+                    </option>
+
+                    <option value="safety">
+                        Safety Analysis
+                    </option>
+
+                    <option value="technical">
+                        Technical Analysis
+                    </option>
+
+                    <option value="summary">
+                        Document Summary
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="flex items-end">
+
+                <button
+                    id="executeAnalysis"
+                    type="button"
+                    class="w-full bg-cyan-500 hover:bg-cyan-400 text-black font-bold px-6 py-3 rounded-lg flex justify-center items-center gap-2"
+                >
+
+                    <span class="material-symbols-outlined">
+                        play_arrow
+                    </span>
+
+                    EXECUTE AI ANALYSIS
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- Processing -->
+
+        <div
+            id="processingBox"
+            class="hidden mt-6 border border-yellow-500/30 bg-yellow-500/5 rounded-xl p-5"
+        >
+
+            <div class="flex items-center gap-3">
+
+                <div
+                    class="w-5 h-5 border-2 border-yellow-400 border-t-transparent rounded-full animate-spin"
+                ></div>
+
+                <div>
+
+                    <p class="text-yellow-400 font-semibold">
+                        AI ANALYSIS PROCESSING
+                    </p>
+
+                    <p
+                        id="processingText"
+                        class="text-sm text-gray-400 mt-1"
+                    >
+                        Local AI engine is analyzing your document...
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         RESULT
+    ===================================================== -->
+
+    <section
+        class="bg-gray-900/80 border border-gray-700 rounded-xl p-6"
+    >
+
+        <div class="flex justify-between items-center mb-5">
+
+            <div>
+
+                <h3 class="text-xl font-semibold text-white">
+                    Analysis Result
+                </h3>
+
+                <p
+                    id="resultMeta"
+                    class="text-xs text-gray-500 mt-1"
+                ></p>
+
+            </div>
+
+
+            <button
+                id="clearResult"
+                type="button"
+                class="border border-gray-600 text-gray-400 px-3 py-2 rounded-lg hover:text-white"
+            >
+
+                Clear
+
+            </button>
+
+        </div>
+
+
+
+        <div
+            id="analysisResult"
+            class="border border-gray-700 rounded-xl bg-black/30 p-6 min-h-[220px]"
+        >
+
+            <div class="text-center text-gray-500 py-10">
+
+                <span class="material-symbols-outlined text-5xl">
+                    smart_toy
+                </span>
+
+                <p class="mt-3">
+                    Select a document and execute analysis.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+
+<!-- =====================================================
+     JAVASCRIPT
+===================================================== -->
+
+<script>
+
+const API_URL = "http://127.0.0.1:8000";
+
+
+/* =====================================================
+   WORKSPACE DATA
+===================================================== */
+
+const workspaceId =
+    localStorage.getItem("workspace_id");
+
+const workspaceName =
+    localStorage.getItem("workspace_name") || "Workspace";
+
+const organizationId =
+    localStorage.getItem("organization_id") || "";
+
+const industry =
+    localStorage.getItem("industry") || "general";
+
+
+console.log("=================================");
+console.log("SOVEREIGNX AI ANALYSIS");
+console.log("API:", API_URL);
+console.log("Workspace:", workspaceId);
+console.log("Workspace Name:", workspaceName);
+console.log("Organization:", organizationId);
+console.log("Industry:", industry);
+console.log("=================================");
+
+
+if (!workspaceId) {
+
+    alert("Workspace not found. Please login again.");
+
+    window.location.href =
+        "../auth_portal_toggle_mode/index.html";
+}
+
+
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+document.getElementById("workspaceName").textContent =
+    workspaceName;
+
+document.getElementById("industryName").textContent =
+    industry.toUpperCase();
+
+document.getElementById("workspaceIdText").textContent =
+    "ID: " + workspaceId;
+
+
+
+/* =====================================================
+   VARIABLES
+===================================================== */
+
+let documents = [];
+
+let selectedDocumentId = null;
+
+let pollingTimer = null;
+
+
+
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
+
+function escapeHtml(value) {
+
+    return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+}
+
+
+
+/* =====================================================
+   SHOW UPLOAD STATUS
+===================================================== */
+
+function showUploadStatus(message, type) {
+
+    const box =
+        document.getElementById("uploadStatus");
+
+    box.classList.remove(
+        "hidden",
+        "text-green-400",
+        "text-red-400",
+        "text-yellow-400",
+        "bg-green-500/10",
+        "bg-red-500/10",
+        "bg-yellow-500/10"
+    );
+
+
+    if (type === "success") {
+
+        box.classList.add(
+            "text-green-400",
+            "bg-green-500/10"
+        );
+
+    } else if (type === "error") {
+
+        box.classList.add(
+            "text-red-400",
+            "bg-red-500/10"
+        );
+
+    } else {
+
+        box.classList.add(
+            "text-yellow-400",
+            "bg-yellow-500/10"
+        );
+
+    }
+
+
+    box.textContent = message;
+}
+
+
+
+/* =====================================================
+   LOAD DOCUMENTS
+===================================================== */
+
+async function loadDocuments() {
+
+    const container =
+        document.getElementById("documentsList");
+
+
+    container.innerHTML = `
+        <div class="text-center py-10 text-gray-500">
+            <div class="w-7 h-7 border-2 border-cyan-400 border-t-transparent rounded-full animate-spin mx-auto"></div>
+            <p class="mt-3">Loading documents...</p>
+        </div>
+    `;
+
+
+    try {
+
+        const url =
+            `${API_URL}/documents/workspace/${workspaceId}`;
+
+
+        console.log(
+            "Fetching documents:",
+            url
+        );
+
+
+        const response =
+            await fetch(url);
+
+
+        console.log(
+            "Documents HTTP:",
+            response.status
+        );
+
+
+        const text =
+            await response.text();
+
+
+        if (!response.ok) {
+
+            console.error(
+                "Documents API error:",
+                text
+            );
+
+            throw new Error(
+                `Documents API returned HTTP ${response.status}`
+            );
+
+        }
+
+
+        const data =
+            JSON.parse(text);
+
+
+        console.log(
+            "Documents received:",
+            data
+        );
+
+
+        documents =
+            Array.isArray(data)
+                ? data
+                : (data.documents || []);
+
+
+        displayDocuments(documents);
+
+
+    } catch (error) {
+
+        console.error(
+            "Document fetch error:",
+            error
+        );
+
+
+        container.innerHTML = `
+            <div class="border border-red-500/30 bg-red-500/5 rounded-xl p-5">
+
+                <p class="text-red-400 font-semibold">
+                    Failed to load documents
+                </p>
+
+                <p class="text-sm text-gray-400 mt-2">
+                    ${escapeHtml(error.message)}
+                </p>
+
+                <button
+                    onclick="loadDocuments()"
+                    class="mt-4 border border-red-500 text-red-400 px-4 py-2 rounded-lg"
+                >
+                    Retry
+                </button>
+
+            </div>
+        `;
+
+    }
+
+}
+
+
+
+/* =====================================================
+   DISPLAY DOCUMENTS
+===================================================== */
+
+function displayDocuments(list) {
+
+    const container =
+        document.getElementById("documentsList");
+
+
+    if (!list.length) {
+
+        container.innerHTML = `
+            <div class="text-center py-12 text-gray-500">
+
+                <span class="material-symbols-outlined text-5xl">
+                    folder_open
+                </span>
+
+                <p class="mt-3">
+                    No documents uploaded yet.
+                </p>
+
+                <p class="text-xs mt-1">
+                    Upload a document to start AI analysis.
+                </p>
+
+            </div>
+        `;
+
+        return;
+    }
+
+
+    container.innerHTML = "";
+
+
+    list.forEach(doc => {
+
+        const card =
+            document.createElement("div");
+
+
+        card.className =
+            "document-card border border-gray-700 bg-gray-800/50 rounded-xl p-4 mb-3 cursor-pointer";
+
+
+        if (
+            selectedDocumentId &&
+            selectedDocumentId === doc.id
+        ) {
+
+            card.classList.add("selected");
+
+        }
+
+
+        let statusClass =
+            "text-gray-400";
+
+
+        if (doc.status === "completed") {
+
+            statusClass =
+                "text-green-400";
+
+        } else if (doc.status === "analyzed") {
+
+            statusClass =
+                "text-green-400";
+
+        } else if (doc.status === "processing") {
+
+            statusClass =
+                "text-yellow-400";
+
+        } else if (doc.status === "analysis_failed") {
+
+            statusClass =
+                "text-red-400";
+
+        }
+
+
+        card.innerHTML = `
+
+            <div class="flex items-center gap-4">
+
+                <div
+                    class="w-11 h-11 rounded-lg bg-cyan-500/10 flex items-center justify-center"
+                >
+
+                    <span class="material-symbols-outlined text-cyan-400">
+                        description
+                    </span>
+
+                </div>
+
+
+                <div class="flex-1 min-w-0">
+
+                    <p class="font-semibold text-white truncate">
+                        ${escapeHtml(doc.filename || "Unnamed document")}
+                    </p>
+
+                    <p class="text-xs text-gray-500 mt-1">
+                        ID: ${escapeHtml(doc.id || "")}
+                    </p>
+
+                    <p class="text-xs ${statusClass} mt-1">
+                        Status: ${escapeHtml(doc.status || "uploaded")}
+                    </p>
+
+                </div>
+
+
+                <div>
+
+                    <span class="material-symbols-outlined text-gray-500">
+                        chevron_right
+                    </span>
+
+                </div>
+
+            </div>
+        `;
+
+
+        card.onclick = function() {
+
+            selectDocument(
+                doc.id,
+                doc.filename
+            );
+
+        };
+
+
+        container.appendChild(card);
+
+    });
+
+}
+
+
+
+/* =====================================================
+   SELECT DOCUMENT
+===================================================== */
+
+function selectDocument(
+    documentId,
+    filename
+) {
+
+    selectedDocumentId =
+        documentId;
+
+
+    console.log(
+        "Selected document:",
+        documentId
+    );
+
+
+    document.getElementById(
+        "selectedDocument"
+    ).textContent =
+        filename || "Selected document";
+
+
+    document.getElementById(
+        "selectedDocumentId"
+    ).textContent =
+        documentId;
+
+
+    displayDocuments(documents);
+
+}
+
+
+
+/* =====================================================
+   UPLOAD DOCUMENT
+===================================================== */
+
+async function uploadDocument(file) {
+
+    if (!file) {
+
+        return;
+
+    }
+
+
+    showUploadStatus(
+        "Uploading document...",
+        "loading"
+    );
+
+
+    try {
+
+        const formData =
+            new FormData();
+
+
+        formData.append(
+            "workspace_id",
+            workspaceId
+        );
+
+
+        formData.append(
+            "file",
+            file
+        );
+
+
+        console.log(
+            "Uploading:",
+            file.name
+        );
+
+
+        const response =
+            await fetch(
+                `${API_URL}/documents/upload`,
+                {
+                    method: "POST",
+                    body: formData
+                }
+            );
+
+
+        const text =
+            await response.text();
+
+
+        let data = {};
+
+
+        try {
+
+            data =
+                JSON.parse(text);
+
+        } catch {
+
+            data = {
+                detail: text
+            };
+
+        }
+
+
+        console.log(
+            "Upload response:",
+            data
+        );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.detail ||
+                `Upload failed: HTTP ${response.status}`
+            );
+
+        }
+
+
+        showUploadStatus(
+            "Document uploaded successfully.",
+            "success"
+        );
+
+
+        document.getElementById(
+            "documentUpload"
+        ).value = "";
+
+
+        await loadDocuments();
+
+
+        /*
+            Automatically select newly uploaded document
+            if backend returned its ID.
+        */
+
+        if (data.id) {
+
+            selectDocument(
+                data.id,
+                data.filename || file.name
+            );
+
+        }
+
+
+    } catch (error) {
+
+        console.error(
+            "Upload error:",
+            error
+        );
+
+
+        showUploadStatus(
+            "Upload failed: " + error.message,
+            "error"
+        );
+
+    }
+
+}
+
+
+
+/* =====================================================
+   FILE INPUT
+===================================================== */
+
+document.getElementById(
+    "documentUpload"
+).addEventListener(
+    "change",
+    function() {
+
+        const file =
+            this.files[0];
+
+        uploadDocument(file);
+
+    }
+);
+
+
+
+/* =====================================================
+   EXECUTE ANALYSIS
+===================================================== */
+
+async function executeAnalysis() {
+
+    if (!selectedDocumentId) {
+
+        alert(
+            "Please select a document first."
+        );
+
+        return;
+
+    }
+
+
+    const analysisType =
+        document.getElementById(
+            "analysisType"
+        ).value;
+
+
+    console.log("=================================");
+    console.log("STARTING AI ANALYSIS");
+    console.log("Document:", selectedDocumentId);
+    console.log("Type:", analysisType);
+    console.log("=================================");
+
+
+    /*
+        Stop previous polling.
+    */
+
+    if (pollingTimer) {
+
+        clearInterval(pollingTimer);
+
+        pollingTimer = null;
+
+    }
+
+
+    const button =
+        document.getElementById(
+            "executeAnalysis"
+        );
+
+
+    button.disabled = true;
+
+    button.innerHTML = `
+
+        <div
+            class="w-5 h-5 border-2 border-black border-t-transparent rounded-full animate-spin"
+        ></div>
+
+        ANALYZING...
+
+    `;
+
+
+    document.getElementById(
+        "processingBox"
+    ).classList.remove("hidden");
+
+
+    document.getElementById(
+        "processingText"
+    ).textContent =
+        "Local AI engine is analyzing your document. Please wait...";
+
+
+    showAnalysisResult(
+        "AI analysis started. Waiting for local AI result..."
+    );
+
+
+    try {
+
+        const response =
+            await fetch(
+                `${API_URL}/analysis/${selectedDocumentId}`,
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+
+                        analysis_type:
+                            analysisType
+
+                    })
+
+                }
+            );
+
+
+        const text =
+            await response.text();
+
+
+        let data = {};
+
+
+        try {
+
+            data =
+                JSON.parse(text);
+
+        } catch {
+
+            data = {
+                detail: text
+            };
+
+        }
+
+
+        console.log(
+            "Analysis HTTP:",
+            response.status
+        );
+
+
+        console.log(
+            "Analysis API response:",
+            data
+        );
+
+
+        if (!response.ok) {
+
+            let errorMessage =
+                "Analysis failed";
+
+
+            if (data.detail) {
+
+                if (Array.isArray(data.detail)) {
+
+                    errorMessage =
+                        data.detail
+                            .map(
+                                x =>
+                                    x.msg ||
+                                    JSON.stringify(x)
+                            )
+                            .join("\n");
+
+                } else {
+
+                    errorMessage =
+                        String(data.detail);
+
+                }
+
+            }
+
+
+            throw new Error(errorMessage);
+
+        }
+
+
+        /*
+            Backend accepted analysis.
+            Now start polling.
+        */
+
+        showAnalysisResult(
+            "AI analysis started.\n\nLocal Ollama engine is processing the document..."
+        );
+
+
+        startAnalysisPolling(
+            selectedDocumentId
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "AI analysis error:",
+            error
+        );
+
+
+        document.getElementById(
+            "processingBox"
+        ).classList.add("hidden");
+
+
+        resetExecuteButton();
+
+
+        showAnalysisResult(
+            "Analysis failed:\n\n" +
+            error.message
+        );
+
+    }
+
+}
+
+
+
+/* =====================================================
+   POLLING
+===================================================== */
+
+function startAnalysisPolling(
+    documentId
+) {
+
+    let attempts = 0;
+
+    const maxAttempts = 120;
+
+
+    /*
+        Check immediately once.
+    */
+
+    checkAnalysisResult(
+        documentId
+    );
+
+
+    /*
+        Then every 3 seconds.
+    */
+
+    pollingTimer =
+        setInterval(
+            async function() {
+
+                attempts++;
+
+
+                console.log(
+                    "Checking AI result. Attempt:",
+                    attempts
+                );
+
+
+                const completed =
+                    await checkAnalysisResult(
+                        documentId
+                    );
+
+
+                if (completed) {
+
+                    clearInterval(
+                        pollingTimer
+                    );
+
+                    pollingTimer =
+                        null;
+
+                    return;
+
+                }
+
+
+                if (
+                    attempts >=
+                    maxAttempts
+                ) {
+
+                    clearInterval(
+                        pollingTimer
+                    );
+
+                    pollingTimer =
+                        null;
+
+
+                    document.getElementById(
+                        "processingBox"
+                    ).classList.add("hidden");
+
+
+                    resetExecuteButton();
+
+
+                    showAnalysisResult(
+                        "Analysis is taking longer than expected.\n\nCheck your backend terminal. The local AI model may still be processing the document."
+                    );
+
+                }
+
+            },
+            3000
+        );
+
+}
+
+
+
+/* =====================================================
+   CHECK ANALYSIS RESULT
+===================================================== */
+
+async function checkAnalysisResult(
+    documentId
+) {
+
+    try {
+
+        const response =
+            await fetch(
+                `${API_URL}/analysis/${documentId}`,
+                {
+                    method: "GET",
+                    cache: "no-store"
+                }
+            );
+
+
+        const text =
+            await response.text();
+
+
+        let data = {};
+
+
+        try {
+
+            data =
+                JSON.parse(text);
+
+        } catch {
+
+            console.error(
+                "Invalid JSON from analysis API:",
+                text
+            );
+
+            return false;
+
+        }
+
+
+        console.log(
+            "Analysis result response:",
+            data
+        );
+
+
+        /*
+            404 means backend has not saved
+            the analysis yet.
+        */
+
+        if (response.status === 404) {
+
+            document.getElementById(
+                "processingText"
+            ).textContent =
+                "AI is still processing the document...";
+
+            return false;
+
+        }
+
+
+        if (!response.ok) {
+
+            console.error(
+                "Analysis result HTTP error:",
+                response.status,
+                data
+            );
+
+            return false;
+
+        }
+
+
+        /*
+            =========================================
+            IMPORTANT PART
+            =========================================
+
+            Backend can return:
+
+            {
+                document_id: "...",
+                status: "processing",
+                analyses: []
+            }
+
+            OR:
+
+            {
+                document_id: "...",
+                analyses: [
+                    {
+                        status: "completed",
+                        result: "AI OUTPUT..."
+                    }
+                ]
+            }
+        */
+
+
+        const analyses =
+            Array.isArray(data.analyses)
+                ? data.analyses
+                : [];
+
+
+        /*
+            Still processing.
+        */
+
+        if (
+            data.status === "processing" &&
+            analyses.length === 0
+        ) {
+
+            document.getElementById(
+                "processingText"
+            ).textContent =
+                "Local AI is analyzing the document...";
+
+            return false;
+
+        }
+
+
+        /*
+            No analysis yet.
+        */
+
+        if (!analyses.length) {
+
+            document.getElementById(
+                "processingText"
+            ).textContent =
+                "Waiting for AI result...";
+
+            return false;
+
+        }
+
+
+        /*
+            Latest analysis.
+        */
+
+        const latest =
+            analyses[0];
+
+
+        console.log(
+            "LATEST ANALYSIS:",
+            latest
+        );
+
+
+        /*
+            If status is still processing.
+        */
+
+        if (
+            latest.status === "processing"
+        ) {
+
+            document.getElementById(
+                "processingText"
+            ).textContent =
+                "AI model is still processing...";
+
+            return false;
+
+        }
+
+
+        /*
+            Analysis failed.
+        */
+
+        if (
+            latest.status === "analysis_failed" ||
+            latest.status === "failed"
+        ) {
+
+            document.getElementById(
+                "processingBox"
+            ).classList.add("hidden");
+
+
+            resetExecuteButton();
+
+
+            showAnalysisResult(
+                "AI analysis failed:\n\n" +
+                (
+                    latest.error ||
+                    latest.analysis_error ||
+                    latest.result ||
+                    "Unknown AI error"
+                )
+            );
+
+
+            return true;
+
+        }
+
+
+        /*
+            =========================================
+            FINAL RESULT
+            =========================================
+        */
+
+        if (
+            latest.result !== undefined &&
+            latest.result !== null &&
+            String(latest.result).trim() !== ""
+        ) {
+
+            document.getElementById(
+                "processingBox"
+            ).classList.add("hidden");
+
+
+            resetExecuteButton();
+
+
+            const model =
+                latest.model_used ||
+                "Local AI";
+
+
+            const pipeline =
+                latest.pipeline ||
+                "local";
+
+
+            document.getElementById(
+                "resultMeta"
+            ).textContent =
+                `Model: ${model} • Pipeline: ${pipeline} • Status: completed`;
+
+
+            showAnalysisResult(
+                latest.result
+            );
+
+
+            console.log(
+                "================================="
+            );
+
+            console.log(
+                "FINAL AI RESULT:"
+            );
+
+            console.log(
+                latest.result
+            );
+
+            console.log(
+                "================================="
+            );
+
+
+            return true;
+
+        }
+
+
+        /*
+            If backend says completed but
+            result field is missing.
+        */
+
+        if (
+            latest.status === "completed"
+        ) {
+
+            document.getElementById(
+                "processingBox"
+            ).classList.add("hidden");
+
+
+            resetExecuteButton();
+
+
+            showAnalysisResult(
+                JSON.stringify(
+                    latest,
+                    null,
+                    2
+                )
+            );
+
+
+            return true;
+
+        }
+
+
+        return false;
+
+
+    } catch (error) {
+
+        console.error(
+            "Polling error:",
+            error
+        );
+
+        return false;
+
+    }
+
+}
+
+
+
+/* =====================================================
+   SHOW RESULT
+===================================================== */
+
+function showAnalysisResult(
+    result
+) {
+
+    const element =
+        document.getElementById(
+            "analysisResult"
+        );
+
+
+    if (!element) {
+
+        return;
+
+    }
+
+
+    element.innerHTML = `
+
+        <div
+            class="result-box text-gray-200 leading-7 text-sm md:text-base"
+        >
+            ${escapeHtml(result)}
+        </div>
+
+    `;
+
+}
+
+
+
+/* =====================================================
+   RESET EXECUTE BUTTON
+===================================================== */
+
+function resetExecuteButton() {
+
+    const button =
+        document.getElementById(
+            "executeAnalysis"
+        );
+
+
+    button.disabled = false;
+
+
+    button.innerHTML = `
+
+        <span class="material-symbols-outlined">
+            play_arrow
+        </span>
+
+        EXECUTE AI ANALYSIS
+
+    `;
+
+}
+
+
+
+/* =====================================================
+   CLEAR RESULT
+===================================================== */
+
+document.getElementById(
+    "clearResult"
+).addEventListener(
+    "click",
+    function() {
+
+        document.getElementById(
+            "resultMeta"
+        ).textContent = "";
+
+
+        showAnalysisResult(
+            "Select a document and execute analysis."
+        );
+
+    }
+);
+
+
+
+/* =====================================================
+   REFRESH
+===================================================== */
+
+document.getElementById(
+    "refreshDocuments"
+).addEventListener(
+    "click",
+    loadDocuments
+);
+
+
+
+/* =====================================================
+   EXECUTE BUTTON
+===================================================== */
+
+document.getElementById(
+    "executeAnalysis"
+).addEventListener(
+    "click",
+    executeAnalysis
+);
+
+
+
+/* =====================================================
+   INITIAL LOAD
+===================================================== */
+
+loadDocuments();
+
+</script>
+
+</body>
+
+</html>
+```

@@ -1,0 +1,584 @@
+```html
+<!DOCTYPE html>
+<html lang="en" class="dark">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>SovereignX - AI Agents</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+        rel="stylesheet"
+    >
+
+    <style>
+
+        body {
+            background: #0a0f14;
+            color: #dee3ea;
+        }
+
+        .card {
+            background: #171c21;
+            border: 1px solid #3b494b;
+            transition: 0.2s;
+        }
+
+        .card:hover {
+            border-color: #00dbe9;
+            transform: translateY(-4px);
+            box-shadow: 0 0 25px rgba(0,219,233,0.12);
+        }
+
+        .agent-card:hover {
+            border-color: #a855f7;
+            box-shadow: 0 0 25px rgba(168,85,247,0.12);
+        }
+
+    </style>
+
+</head>
+
+
+<body class="min-h-screen">
+
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<header
+    class="border-b border-gray-700
+           bg-black/50
+           px-8 py-5"
+>
+
+    <div
+        class="max-w-7xl mx-auto
+               flex justify-between
+               items-center"
+    >
+
+        <div>
+
+            <h1 class="text-3xl font-bold text-cyan-400">
+                SOVEREIGNX
+            </h1>
+
+            <p class="text-gray-400 text-sm">
+                Sovereign Industrial AI Workbench
+            </p>
+
+        </div>
+
+
+        <div class="text-right">
+
+            <p
+                id="workspaceName"
+                class="font-bold text-white"
+            >
+                Workspace
+            </p>
+
+            <p
+                id="organizationName"
+                class="text-gray-400 text-sm"
+            >
+                ORG: N/A
+            </p>
+
+        </div>
+
+    </div>
+
+</header>
+
+
+
+<!-- =====================================================
+     MAIN
+===================================================== -->
+
+<main class="max-w-7xl mx-auto p-8">
+
+
+    <!-- BACK -->
+
+    <button
+        onclick="goBack()"
+        class="text-gray-400
+               hover:text-cyan-400
+               mb-8"
+    >
+
+        ← Back to Industry Workspace
+
+    </button>
+
+
+
+    <!-- TITLE -->
+
+    <div class="mb-10">
+
+        <p class="text-purple-400 text-sm font-semibold">
+            LOCAL AI AGENTS
+        </p>
+
+        <h2 class="text-4xl font-bold text-white mt-2">
+            AI Agent Workbench
+        </h2>
+
+        <p class="text-gray-400 mt-3">
+            Select a specialized AI agent to analyze
+            industrial data and documents locally.
+        </p>
+
+    </div>
+
+
+
+    <!-- =================================================
+         INDUSTRY INFO
+    ================================================= -->
+
+    <div
+        class="card rounded-xl p-5 mb-8
+               flex flex-col md:flex-row
+               justify-between gap-4"
+    >
+
+        <div>
+
+            <p class="text-gray-500 text-sm">
+                ACTIVE INDUSTRY
+            </p>
+
+            <p
+                id="industryName"
+                class="text-xl font-bold text-cyan-400 mt-1"
+            >
+                General
+            </p>
+
+        </div>
+
+
+        <div>
+
+            <p class="text-gray-500 text-sm">
+                WORKSPACE
+            </p>
+
+            <p
+                id="workspaceId"
+                class="text-sm text-gray-300 mt-1"
+            >
+                N/A
+            </p>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =================================================
+         AGENTS
+    ================================================= -->
+
+    <div>
+
+        <div class="flex justify-between items-center mb-5">
+
+            <div>
+
+                <h3 class="text-2xl font-bold text-white">
+                    Available Agents
+                </h3>
+
+                <p class="text-gray-500 text-sm mt-1">
+                    Choose an agent according to your task.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div
+            id="agentsContainer"
+            class="grid
+                   md:grid-cols-2
+                   lg:grid-cols-3
+                   gap-6"
+        >
+
+        </div>
+
+    </div>
+
+
+</main>
+
+
+
+<script>
+
+
+/* =====================================================
+   LOCAL STORAGE
+===================================================== */
+
+const workspaceId =
+    localStorage.getItem("workspace_id");
+
+const workspaceName =
+    localStorage.getItem("workspace_name") || "Workspace";
+
+const organizationId =
+    localStorage.getItem("organization_id") || "N/A";
+
+const industry =
+    localStorage.getItem("selected_industry") ||
+    localStorage.getItem("industry") ||
+    "General";
+
+
+
+/* =====================================================
+   DISPLAY DATA
+===================================================== */
+
+document.getElementById(
+    "workspaceName"
+).innerText =
+    workspaceName;
+
+
+document.getElementById(
+    "organizationName"
+).innerText =
+    "ORG: " + organizationId;
+
+
+document.getElementById(
+    "industryName"
+).innerText =
+    industry;
+
+
+document.getElementById(
+    "workspaceId"
+).innerText =
+    workspaceId || "N/A";
+
+
+
+/* =====================================================
+   AGENT DATA
+===================================================== */
+
+const agents = [
+
+    {
+        id: "compliance-agent",
+
+        name: "Compliance Agent",
+
+        icon: "verified_user",
+
+        description:
+            "Reviews industrial documents and identifies compliance requirements, missing controls and regulatory concerns.",
+
+        tasks:
+            "Compliance checks, standards review, policy verification"
+    },
+
+
+    {
+        id: "safety-agent",
+
+        name: "Safety Agent",
+
+        icon: "health_and_safety",
+
+        description:
+            "Analyzes industrial information to identify safety risks, hazards and operational concerns.",
+
+        tasks:
+            "Hazard detection, safety review, risk identification"
+    },
+
+
+    {
+        id: "document-agent",
+
+        name: "Document Analyzer",
+
+        icon: "description",
+
+        description:
+            "Reads uploaded technical documents and extracts important information, findings and actionable points.",
+
+        tasks:
+            "Document summarization, extraction, technical review"
+    },
+
+
+    {
+        id: "risk-agent",
+
+        name: "Risk Analysis Agent",
+
+        icon: "warning",
+
+        description:
+            "Evaluates industrial information and identifies potential operational risks and critical concerns.",
+
+        tasks:
+            "Risk assessment, concern detection, prioritization"
+    },
+
+
+    {
+        id: "technical-agent",
+
+        name: "Technical Analysis Agent",
+
+        icon: "engineering",
+
+        description:
+            "Performs technical reasoning over engineering information, reports and operational data.",
+
+        tasks:
+            "Technical analysis, engineering review, troubleshooting"
+    },
+
+
+    {
+        id: "audit-agent",
+
+        name: "Audit Agent",
+
+        icon: "fact_check",
+
+        description:
+            "Reviews records and documents to identify missing information, inconsistencies and audit concerns.",
+
+        tasks:
+            "Audit review, evidence checking, inconsistency detection"
+    }
+
+];
+
+
+
+/* =====================================================
+   RENDER AGENTS
+===================================================== */
+
+function renderAgents() {
+
+    const container =
+        document.getElementById(
+            "agentsContainer"
+        );
+
+
+    container.innerHTML = "";
+
+
+    agents.forEach(function(agent) {
+
+
+        const card =
+            document.createElement("div");
+
+
+        card.className =
+            "card agent-card rounded-xl p-6";
+
+
+        card.innerHTML = `
+
+            <div class="flex items-start gap-4">
+
+                <div
+                    class="w-14 h-14
+                           rounded-xl
+                           bg-purple-500/10
+                           border border-purple-500/30
+                           flex items-center
+                           justify-center"
+                >
+
+                    <span
+                        class="material-symbols-outlined
+                               text-purple-400"
+                        style="font-size:32px"
+                    >
+                        ${agent.icon}
+                    </span>
+
+                </div>
+
+
+                <div class="flex-1">
+
+                    <h3
+                        class="text-xl
+                               font-bold
+                               text-white"
+                    >
+                        ${agent.name}
+                    </h3>
+
+                    <p
+                        class="text-xs
+                               text-purple-400
+                               mt-1"
+                    >
+                        LOCAL AI AGENT
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <p
+                class="text-gray-400
+                       text-sm
+                       leading-6
+                       mt-5"
+            >
+                ${agent.description}
+            </p>
+
+
+            <div
+                class="mt-5
+                       p-3
+                       rounded-lg
+                       bg-black/20
+                       border
+                       border-gray-700"
+            >
+
+                <p class="text-xs text-gray-500">
+                    CAPABILITIES
+                </p>
+
+                <p class="text-sm text-gray-300 mt-1">
+                    ${agent.tasks}
+                </p>
+
+            </div>
+
+
+            <button
+                onclick="openAgent('${agent.id}', '${agent.name}')"
+                class="w-full
+                       mt-5
+                       bg-purple-500
+                       hover:bg-purple-400
+                       text-white
+                       font-semibold
+                       py-3
+                       rounded-lg"
+            >
+
+                OPEN AGENT →
+
+            </button>
+
+        `;
+
+
+        container.appendChild(card);
+
+    });
+
+}
+
+
+
+/* =====================================================
+   OPEN AGENT
+===================================================== */
+
+function openAgent(agentId, agentName) {
+
+    console.log(
+        "Opening agent:",
+        agentId
+    );
+
+
+    /* Save selected agent */
+
+    localStorage.setItem(
+        "selected_agent_id",
+        agentId
+    );
+
+
+    localStorage.setItem(
+        "selected_agent_name",
+        agentName
+    );
+
+
+    localStorage.setItem(
+        "agent_industry",
+        industry
+    );
+
+
+    /* Open conversation page */
+
+    window.location.href =
+        "../ai_agent_conversation_portal/index.html";
+
+}
+
+
+
+/* =====================================================
+   BACK
+===================================================== */
+
+function goBack() {
+
+    window.location.href =
+        "../industry/index.html";
+
+}
+
+
+
+/* =====================================================
+   INITIALIZE
+===================================================== */
+
+renderAgents();
+
+
+</script>
+
+
+</body>
+
+</html>
+```

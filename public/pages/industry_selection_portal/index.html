@@ -1,0 +1,720 @@
+```html
+<!DOCTYPE html>
+<html lang="en" class="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SovereignX - Industry</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+        rel="stylesheet"
+    >
+
+    <style>
+
+        body {
+            background: #0a0f14;
+            color: #dee3ea;
+        }
+
+        .card {
+            background: #171c21;
+            border: 1px solid #3b494b;
+            transition: 0.25s;
+        }
+
+        .card:hover {
+            border-color: #00dbe9;
+            transform: translateY(-4px);
+            box-shadow: 0 0 25px rgba(0,219,233,0.15);
+        }
+
+        .hidden-page {
+            display: none;
+        }
+
+    </style>
+
+</head>
+
+
+<body class="min-h-screen">
+
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<header class="border-b border-gray-700 px-8 py-5 flex justify-between items-center">
+
+    <div>
+
+        <h1 class="text-3xl font-bold text-cyan-400">
+            SOVEREIGNX
+        </h1>
+
+        <p class="text-gray-400 text-sm">
+            Sovereign Industrial AI Workbench
+        </p>
+
+    </div>
+
+
+    <div class="text-right">
+
+        <p
+            id="workspaceName"
+            class="font-bold"
+        >
+            Workspace
+        </p>
+
+        <p
+            id="organizationId"
+            class="text-gray-400 text-sm"
+        >
+            ORG: N/A
+        </p>
+
+    </div>
+
+</header>
+
+
+
+<!-- =====================================================
+     PAGE 1
+     INDUSTRY SELECTION
+===================================================== -->
+
+<section id="industryPage">
+
+    <main class="max-w-7xl mx-auto p-8">
+
+        <p class="text-cyan-400 text-sm font-semibold">
+            INDUSTRY SELECTION
+        </p>
+
+
+        <h2 class="text-4xl font-bold mt-2">
+            Select Your Industry
+        </h2>
+
+
+        <p class="text-gray-400 mt-3">
+            Select an industry to access its private AI workspace.
+        </p>
+
+
+
+        <!-- INDUSTRY CARDS -->
+
+        <div
+            class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-10"
+        >
+
+
+            <!-- CHEMICAL -->
+
+            <div
+                onclick="openIndustry('Chemical')"
+                class="card rounded-xl p-7 cursor-pointer"
+            >
+
+                <span
+                    class="material-symbols-outlined text-cyan-400"
+                    style="font-size:50px"
+                >
+                    science
+                </span>
+
+                <h3 class="text-xl font-bold mt-5">
+                    Chemical
+                </h3>
+
+                <p class="text-gray-400 mt-2">
+                    Chemical industry operations, safety and technical analysis.
+                </p>
+
+                <p class="text-cyan-400 mt-6 font-semibold">
+                    OPEN →
+                </p>
+
+            </div>
+
+
+
+            <!-- MECHANICAL -->
+
+            <div
+                onclick="openIndustry('Mechanical')"
+                class="card rounded-xl p-7 cursor-pointer"
+            >
+
+                <span
+                    class="material-symbols-outlined text-blue-400"
+                    style="font-size:50px"
+                >
+                    precision_manufacturing
+                </span>
+
+                <h3 class="text-xl font-bold mt-5">
+                    Mechanical
+                </h3>
+
+                <p class="text-gray-400 mt-2">
+                    Mechanical equipment and engineering analysis.
+                </p>
+
+                <p class="text-blue-400 mt-6 font-semibold">
+                    OPEN →
+                </p>
+
+            </div>
+
+
+
+            <!-- ELECTRICAL -->
+
+            <div
+                onclick="openIndustry('Electrical')"
+                class="card rounded-xl p-7 cursor-pointer"
+            >
+
+                <span
+                    class="material-symbols-outlined text-yellow-400"
+                    style="font-size:50px"
+                >
+                    bolt
+                </span>
+
+                <h3 class="text-xl font-bold mt-5">
+                    Electrical
+                </h3>
+
+                <p class="text-gray-400 mt-2">
+                    Electrical systems and equipment analysis.
+                </p>
+
+                <p class="text-yellow-400 mt-6 font-semibold">
+                    OPEN →
+                </p>
+
+            </div>
+
+
+
+            <!-- MANUFACTURING -->
+
+            <div
+                onclick="openIndustry('Manufacturing')"
+                class="card rounded-xl p-7 cursor-pointer"
+            >
+
+                <span
+                    class="material-symbols-outlined text-orange-400"
+                    style="font-size:50px"
+                >
+                    factory
+                </span>
+
+                <h3 class="text-xl font-bold mt-5">
+                    Manufacturing
+                </h3>
+
+                <p class="text-gray-400 mt-2">
+                    Manufacturing process intelligence.
+                </p>
+
+                <p class="text-orange-400 mt-6 font-semibold">
+                    OPEN →
+                </p>
+
+            </div>
+
+
+
+            <!-- MINING -->
+
+            <div
+                onclick="openIndustry('Mining')"
+                class="card rounded-xl p-7 cursor-pointer"
+            >
+
+                <span
+                    class="material-symbols-outlined text-amber-400"
+                    style="font-size:50px"
+                >
+                    terrain
+                </span>
+
+                <h3 class="text-xl font-bold mt-5">
+                    Mining
+                </h3>
+
+                <p class="text-gray-400 mt-2">
+                    Mining operations and safety analysis.
+                </p>
+
+                <p class="text-amber-400 mt-6 font-semibold">
+                    OPEN →
+                </p>
+
+            </div>
+
+
+
+            <!-- OIL & GAS -->
+
+            <div
+                onclick="openIndustry('Oil & Gas')"
+                class="card rounded-xl p-7 cursor-pointer"
+            >
+
+                <span
+                    class="material-symbols-outlined text-red-400"
+                    style="font-size:50px"
+                >
+                    oil_barrel
+                </span>
+
+                <h3 class="text-xl font-bold mt-5">
+                    Oil & Gas
+                </h3>
+
+                <p class="text-gray-400 mt-2">
+                    Oil, gas and process safety intelligence.
+                </p>
+
+                <p class="text-red-400 mt-6 font-semibold">
+                    OPEN →
+                </p>
+
+            </div>
+
+
+
+            <!-- CONSTRUCTION -->
+
+            <div
+                onclick="openIndustry('Construction')"
+                class="card rounded-xl p-7 cursor-pointer"
+            >
+
+                <span
+                    class="material-symbols-outlined text-purple-400"
+                    style="font-size:50px"
+                >
+                    construction
+                </span>
+
+                <h3 class="text-xl font-bold mt-5">
+                    Construction
+                </h3>
+
+                <p class="text-gray-400 mt-2">
+                    Construction projects and risk analysis.
+                </p>
+
+                <p class="text-purple-400 mt-6 font-semibold">
+                    OPEN →
+                </p>
+
+            </div>
+
+
+
+            <!-- ENERGY -->
+
+            <div
+                onclick="openIndustry('Energy')"
+                class="card rounded-xl p-7 cursor-pointer"
+            >
+
+                <span
+                    class="material-symbols-outlined text-green-400"
+                    style="font-size:50px"
+                >
+                    energy_savings_leaf
+                </span>
+
+                <h3 class="text-xl font-bold mt-5">
+                    Energy
+                </h3>
+
+                <p class="text-gray-400 mt-2">
+                    Energy infrastructure and operational analysis.
+                </p>
+
+                <p class="text-green-400 mt-6 font-semibold">
+                    OPEN →
+                </p>
+
+            </div>
+
+
+        </div>
+
+    </main>
+
+</section>
+
+
+
+<!-- =====================================================
+     PAGE 2
+     INDUSTRY WORKSPACE
+===================================================== -->
+
+<section
+    id="workspacePage"
+    class="hidden-page"
+>
+
+    <main class="max-w-7xl mx-auto p-8">
+
+
+        <!-- BACK -->
+
+        <button
+            onclick="backToIndustries()"
+            class="text-gray-400 hover:text-cyan-400 mb-8"
+        >
+            ← Back to Industries
+        </button>
+
+
+        <p class="text-cyan-400 text-sm font-semibold">
+            INDUSTRY WORKSPACE
+        </p>
+
+
+        <h2
+            id="industryTitle"
+            class="text-4xl font-bold mt-2"
+        >
+            Industry Operations
+        </h2>
+
+
+        <p class="text-gray-400 mt-3">
+            Secure private industrial AI workspace.
+        </p>
+
+
+
+        <!-- =================================================
+             MODULES
+        ================================================= -->
+
+        <div
+            class="grid md:grid-cols-3 gap-6 mt-10"
+        >
+
+
+            <!-- DOCUMENTS -->
+
+            <div
+                onclick="openDocuments()"
+                class="card rounded-xl p-7 cursor-pointer"
+            >
+
+                <span
+                    class="material-symbols-outlined text-cyan-400"
+                    style="font-size:52px"
+                >
+                    folder
+                </span>
+
+
+                <h3 class="text-2xl font-bold mt-5">
+                    Documents
+                </h3>
+
+
+                <p class="text-gray-400 mt-2">
+                    Upload and manage industrial documents,
+                    diagrams and files.
+                </p>
+
+
+                <p class="text-cyan-400 mt-6 font-semibold">
+                    OPEN DOCUMENTS →
+                </p>
+
+            </div>
+
+
+
+            <!-- AI ANALYSIS -->
+
+            <div
+                onclick="openAnalysis()"
+                class="card rounded-xl p-7 cursor-pointer"
+            >
+
+                <span
+                    class="material-symbols-outlined text-green-400"
+                    style="font-size:52px"
+                >
+                    analytics
+                </span>
+
+
+                <h3 class="text-2xl font-bold mt-5">
+                    AI Analysis
+                </h3>
+
+
+                <p class="text-gray-400 mt-2">
+                    Analyze uploaded industrial documents
+                    using local AI.
+                </p>
+
+
+                <p class="text-green-400 mt-6 font-semibold">
+                    OPEN AI ANALYSIS →
+                </p>
+
+            </div>
+
+
+
+            <!-- AI AGENTS -->
+
+            <div
+                onclick="openAgents()"
+                class="card rounded-xl p-7 cursor-pointer"
+            >
+
+                <span
+                    class="material-symbols-outlined text-purple-400"
+                    style="font-size:52px"
+                >
+                    smart_toy
+                </span>
+
+
+                <h3 class="text-2xl font-bold mt-5">
+                    AI Agents
+                </h3>
+
+
+                <p class="text-gray-400 mt-2">
+                    Access specialized industrial AI agents
+                    and execute tasks.
+                </p>
+
+
+                <p class="text-purple-400 mt-6 font-semibold">
+                    OPEN AI AGENTS →
+                </p>
+
+            </div>
+
+
+        </div>
+
+    </main>
+
+</section>
+
+
+
+<script>
+
+
+/* =====================================================
+   LOGIN DATA
+===================================================== */
+
+const workspaceId =
+    localStorage.getItem("workspace_id");
+
+const workspaceName =
+    localStorage.getItem("workspace_name");
+
+const organizationId =
+    localStorage.getItem("organization_id");
+
+
+
+/* =====================================================
+   DISPLAY LOGIN DATA
+===================================================== */
+
+document.getElementById("workspaceName").innerText =
+    workspaceName || "Workspace";
+
+document.getElementById("organizationId").innerText =
+    "ORG: " + (organizationId || "N/A");
+
+
+
+/* =====================================================
+   LOGIN CHECK
+===================================================== */
+
+if (!workspaceId) {
+
+    alert("Please login first.");
+
+    window.location.href =
+        "../auth_portal_toggle_mode/index.html";
+
+}
+
+
+
+/* =====================================================
+   OPEN INDUSTRY
+===================================================== */
+
+function openIndustry(industry) {
+
+    console.log("Selected Industry:", industry);
+
+
+    /* Save selected industry */
+
+    localStorage.setItem(
+        "selected_industry",
+        industry
+    );
+
+    localStorage.setItem(
+        "industry",
+        industry
+    );
+
+
+    /* Also save for agents */
+
+    localStorage.setItem(
+        "agent_industry",
+        industry
+    );
+
+
+    /* Change title */
+
+    document.getElementById(
+        "industryTitle"
+    ).innerText =
+        industry + " Operations";
+
+
+    /* Hide industry selection */
+
+    document.getElementById(
+        "industryPage"
+    ).style.display = "none";
+
+
+    /* Show workspace */
+
+    document.getElementById(
+        "workspacePage"
+    ).style.display = "block";
+
+
+    console.log(
+        "Industry workspace opened:",
+        industry
+    );
+
+}
+
+
+
+/* =====================================================
+   BACK TO INDUSTRIES
+===================================================== */
+
+function backToIndustries() {
+
+    document.getElementById(
+        "workspacePage"
+    ).style.display = "none";
+
+
+    document.getElementById(
+        "industryPage"
+    ).style.display = "block";
+
+}
+
+
+
+/* =====================================================
+   DOCUMENTS
+===================================================== */
+
+function openDocuments() {
+
+    console.log(
+        "Opening Documents..."
+    );
+
+
+    window.location.href =
+        "../document_analyzer_chat_portal/index.html";
+
+}
+
+
+
+/* =====================================================
+   AI ANALYSIS
+===================================================== */
+
+function openAnalysis() {
+
+    console.log(
+        "Opening AI Analysis..."
+    );
+
+
+    window.location.href =
+        "../analysis_studio_populated_dashboard/index.html";
+
+}
+
+
+
+/* =====================================================
+   AI AGENTS
+===================================================== */
+
+function openAgents() {
+
+    console.log(
+        "Opening AI Agents..."
+    );
+
+
+    /*
+       Selected industry already localStorage
+       mein saved hai.
+
+       AI Agents workspace open hoga.
+    */
+
+    window.location.href =
+        "../ai_agents_workspace/index.html";
+
+}
+
+
+</script>
+
+
+</body>
+
+</html>
+```
