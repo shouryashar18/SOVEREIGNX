@@ -1,48 +1,136 @@
-# SIH26171 — Screens
+# SovereignX — On-Premise Agentic AI Workbench
 
-One Vite + React app that wires together all 22 Stitch-exported screens from
-`sih-frontend` so they run as a single site instead of 22 disconnected HTML
-files.
+**SIH26117 — Sovereign On-Premise Agentic AI Workbench using Open-Weight Multimodal LLMs for Confidential Industrial Work**
 
-## Run it
+SovereignX is an **on-premise Agentic AI Workbench** designed for confidential industrial environments. It enables organizations to work with industrial documents, diagrams, and data using **open-weight multimodal AI models running locally**, without depending on external cloud AI services.
+
+## Key Features
+
+* 🏭 Industry-specific workspaces
+* 📁 Secure document and file management
+* 🤖 Local AI-powered document analysis
+* 👁️ Multimodal analysis of industrial diagrams and images
+* 📊 Analysis results and risk identification
+* 📝 Automated report generation
+* 🔐 Organization-based workspace structure
+* 🧠 Open-weight local AI models through Ollama
+* ☁️ No dependency on external cloud AI APIs
+
+## Technology Stack
+
+### Frontend
+
+* React
+* Vite
+* JavaScript
+* HTML/CSS
+
+### Backend
+
+* FastAPI
+* Python
+* MongoDB
+* REST APIs
+
+### Local AI
+
+* Ollama
+* Qwen 2.5 7B Instruct
+* LLaVA
+
+## Project Structure
+
+```text
+SOVEREIGNX/
+├── frontend/
+│   ├── src/
+│   ├── public/
+│   ├── package.json
+│   └── vite.config.js
+│
+├── backend/
+│   ├── app/
+│   │   ├── models/
+│   │   ├── routers/
+│   │   ├── schemas/
+│   │   ├── services/
+│   │   └── main.py
+│   └── requirements.txt
+│
+└── README.md
+```
+
+## How It Works
+
+1. The user selects an industrial sector.
+2. An organization/workspace is created.
+3. Users access their dedicated workspace.
+4. Industrial documents, diagrams, or images can be uploaded.
+5. The backend processes the uploaded data.
+6. Local AI models analyze the content.
+7. The system identifies relevant risks, observations, and insights.
+8. Analysis results can be used to generate reports.
+
+## Running the Project
+
+### Frontend
 
 ```bash
+cd frontend
 npm install
 npm run dev
 ```
 
-Then open the printed local URL. You'll get:
+### Backend
 
-- A home grid of every screen with a thumbnail
-- A sidebar grouped by area (Core, Auth & Onboarding, Agents, Monitoring, Admin, Industry Views)
-- Click any screen to open it in the viewer, or "Open in new tab" for a full-page view
+```bash
+cd backend
+pip install -r requirements.txt
+uvicorn app.main:app --reload
+```
 
-## How it's wired
+The FastAPI API documentation is available at:
 
-Each screen keeps its **original HTML/CSS exactly as exported** (own Tailwind
-CDN import, own color config, own fonts) — they live untouched under
-`public/pages/<slug>/index.html` and render inside an `<iframe>` at
-`/#/screen/<slug>`. This avoids breaking each screen's bespoke palette, which
-differs screen to screen and isn't a shared design system yet.
+```text
+http://127.0.0.1:8000/docs
+```
 
-The React shell (`src/App.jsx`, `src/pages.js`, `src/App.css`) only provides:
-navigation, routing, and the home grid — it doesn't touch the screens' own
-markup or styling.
+## Local AI Setup
 
-## Known gaps
+SovereignX uses Ollama to run AI models locally.
 
-- `cyber_industrial_intelligence/` and `obsidian_command/` in the original
-  repo only contained a `DESIGN.md` brief, no built HTML — they're not in
-  the nav. Build those screens and drop a `code.html` (renamed to
-  `index.html`) into a new `public/pages/<slug>/` folder, then add an entry
-  to `src/pages.js` to wire them in.
-- Screens don't share state or navigate to each other yet (e.g. clicking
-  "Login" inside the auth screen won't route anywhere in-app) — each is
-  still an isolated static page. Turning these into real React
-  components with shared layout/router links is the next step if you want
-  actual cross-screen flows instead of a screen gallery.
+Required models:
 
-## Deploying
+```bash
+ollama pull qwen2.5:7b-instruct
+ollama pull llava:latest
+```
 
-`npm run build` outputs a static site in `dist/` — deployable to Vercel,
-Netlify, GitHub Pages, etc. as-is.
+The AI processing remains local, supporting confidential industrial use cases.
+
+## Screens & UI
+
+The project includes multiple UI screens covering areas such as:
+
+* Industry Selection
+* Authentication
+* Dashboard
+* AI Agents
+* Document Analysis
+* Analysis Studio
+* Compliance
+* Industrial Workspaces
+
+## Current Status
+
+SovereignX is under active development as an SIH project. The current implementation combines the frontend interface, FastAPI backend, MongoDB workspace management, document processing, and local multimodal AI capabilities.
+
+## Future Scope
+
+* Complete end-to-end agentic workflows
+* Advanced industrial risk analysis
+* More industry-specific AI agents
+* Improved report generation
+* Role-based access control
+* Additional multimodal models
+* Production-ready deployment for on-premise environments
